@@ -155,12 +155,6 @@ function remove() {
     clear(); // Clear the canvas
   }
 
-  // // Save canvas as an image when mouse is clicked
-// function mousePressed() {
-
-//   saveCanvas('neck-tracking-path', 'png');
-// }
-
 function clearCanvas() {
   path = [];
   clear();

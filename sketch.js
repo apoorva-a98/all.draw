@@ -1,28 +1,28 @@
 let currentSketch;
 loadSketch('neckTracking.js');
 
-// document.addEventListener('DOMContentLoaded', (event) => {
-    // document.getElementById('fingerButton').addEventListener('click', function() {
-    //     loadSketch('handTracking.js');
-    // });
+document.addEventListener('DOMContentLoaded', (event) => {
+    document.getElementById('fingerButton').addEventListener('click', function() {
+        loadSketch('handTracking.js');
+    });
 
-    // document.getElementById('noseButton').addEventListener('click', function() {
-    //     loadSketch('noseTracking.js');
-    // });
+    document.getElementById('noseButton').addEventListener('click', function() {
+        loadSketch('noseTracking.js');
+    });
 
-    // document.getElementById('minuteNeckButton').addEventListener('click', function() {
-    // });
+    document.getElementById('minuteNeckButton').addEventListener('click', function() {
+    });
 
-    // document.getElementById('moveAroundButton').addEventListener('click', function() {
-    //     loadSketch('moveAround.js');
-    // });
+    document.getElementById('moveAroundButton').addEventListener('click', function() {
+        loadSketch('moveAround.js');
+    });
 
-    // document.getElementById('saveArtButton').addEventListener('click', function() {
-    //     // saveArt();
-    //     saveCanvas('neck-tracking-path', 'png');
-    //     clearCanvas();
-    // });
-// });
+    document.getElementById('saveArtButton').addEventListener('click', function() {
+        // saveArt();
+        saveCanvas('neck-tracking-path', 'png');
+        clearCanvas();
+    });
+});
 
 function loadSketch(sketchName) {
     // Remove existing canvas if there is one
@@ -58,23 +58,23 @@ function loadSketch(sketchName) {
     };
 }
 
-// function saveArt() {
-//     const frame2 = document.querySelector('.Frame2');
-//     const canvas = frame2.querySelector('canvas');
-//     if (canvas) {
-//         // Use p5.js function to save the canvas as an image
-//         saveCanvas(canvas, 'artwork', 'png');
-//         // Remove the canvas after saving
-//         canvas.remove();
-//         // Optionally, reset button states if needed
-//         resetButtons();
-//     }
-// }
+function saveArt() {
+    const frame2 = document.querySelector('.Frame2');
+    const canvas = frame2.querySelector('canvas');
+    if (canvas) {
+        // Use p5.js function to save the canvas as an image
+        saveCanvas(canvas, 'artwork', 'png');
+        // Remove the canvas after saving
+        canvas.remove();
+        // Optionally, reset button states if needed
+        resetButtons();
+    }
+}
 
-// function resetButtons() {
-//     // Example: Enable all buttons if they were disabled or reset their states
-//     const buttons = document.querySelectorAll('.Button');
-//     buttons.forEach(button => {
-//         button.disabled = false;
-//     });
-// }
+function resetButtons() {
+    // Example: Enable all buttons if they were disabled or reset their states
+    const buttons = document.querySelectorAll('.Button');
+    buttons.forEach(button => {
+        button.disabled = false;
+    });
+}
