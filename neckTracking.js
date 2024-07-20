@@ -34,6 +34,12 @@ function setup() {
   // Initialize the ball position at the center of the canvas
   ballX = width / 2;
   ballY = height / 2;
+
+  document.getElementById('saveArtButton').addEventListener('click', function() {
+    // saveArt();
+    saveCanvas('neck-tracking-path', 'png');
+    clearCanvas();
+});
 }
 
 function draw() {
@@ -150,7 +156,12 @@ function remove() {
   }
 
   // // Save canvas as an image when mouse is clicked
-function mousePressed() {
+// function mousePressed() {
 
-  saveCanvas('neck-tracking-path', 'png');
+//   saveCanvas('neck-tracking-path', 'png');
+// }
+
+function clearCanvas() {
+  path = [];
+  clear();
 }
