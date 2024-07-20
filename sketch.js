@@ -58,11 +58,15 @@ function loadSketch(sketchName) {
 }
 
 function saveArt() {
+<<<<<<< Updated upstream
     const frame2 = document.querySelector('.Frame2');
     if (!frame2) {
         console.error('Frame2 element not found');
         return;
     }
+=======
+    const frame2 = document.getElementById('canvasContainer');
+>>>>>>> Stashed changes
     const canvas = frame2.querySelector('canvas');
     if (canvas) {
         console.log('click');
