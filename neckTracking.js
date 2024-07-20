@@ -7,7 +7,8 @@ let ballX, ballY;
 let ballSize = 10;
 let ballSpeed = 0.0000000000000001;
 let steerX = 0, steerY = 0;
-let path = [];
+let path = []; 
+let drawingEnabled = false;
 
 // Indices for specific eyes and nose landmarks
 const leftEyeIndex = 130;  // Left eye
@@ -20,9 +21,22 @@ function preload() {
 }
 
 function setup() {
-    let myCanvas = createCanvas(windowWidth, windowHeight);
-    myCanvas.parent("canvasContainer"); // Use the ID of the div where you want the canvas to be
+
+  let container = getElementById("canvasContainer");
+
+  let myCanvas = createCanvas(windowWidth, windowHeight);
+  myCanvas.parent("canvasContainer"); // Use the ID of the div where you want the canvas to be
+
+  // Get the dimensions of Frame2
+  let frame2 = select('.Frame2');
+  let frameWidth = frame2.width();
+  let frameHeight = frame2.height();
   frameRate(20); // Set the frame rate to 15 frames per second
+
+
+
+  // // Set the canvas dimensions to match Frame2
+  // myCanvas.size(frameWidth, frameHeight);
   
   // Create the webcam video and hide it
   video = createCapture(VIDEO);
@@ -43,6 +57,7 @@ function setup() {
 }
 
 function draw() {
+  if (!drawingEnabled) return;
   // Draw the webcam video
   // image(video, 0, 0, width, height);
   // background(255);
@@ -69,7 +84,8 @@ function draw() {
       
       // Draw the path of the keypoint
       noFill();
-      stroke(0, 0, 255);
+      // stroke(0, 0, 255);
+      stroke(0)
       strokeWeight(2);
       beginShape();
       for (let pt of path) {
@@ -158,4 +174,9 @@ function remove() {
 function clearCanvas() {
   path = [];
   clear();
+  let drawingEnabled = false;
+}
+
+function touchStarted() {
+  drawingEnabled = true;
 }
