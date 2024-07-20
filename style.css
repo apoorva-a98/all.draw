@@ -64,7 +64,7 @@ body {
 }
 
 /* Button */
-/* .Button {
+.Button {
     align-self: stretch;
     padding: 12px;
     border-radius: 8px;
@@ -79,7 +79,7 @@ body {
     font-weight: 50;
     line-height: 20px;
     word-wrap: break-word;
-} */
+}
 
 .ButtonText {
     color: #303030;
