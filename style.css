@@ -6,8 +6,8 @@ body {
 
 /* AilDraw */
 .AilDraw {
-    width: 99%;
-    height: 98%;
+    width: 95%;
+    height: 95%;
     padding: 10px;
     background: white;
     justify-content: center;
@@ -18,7 +18,7 @@ body {
 
 /* Frame1 */
 .Frame1 {
-    height: 98%;
+    height: 100%;
     width: 25%;
     padding: 43px 24px;
     border: 1px black solid;
@@ -27,22 +27,6 @@ body {
     align-items: flex-start;
     gap: 34px;
     display: inline-flex;
-    align-self: stretch;
-}
-
-/* canvas {;
-    width: 500px;
-    height: 500px;
-    overflow: hidden;
-} */
-
-/* Frame2 */
-.Frame2 {
-    align-self: stretch;
-    height: 98%;
-    width: 70%;
-    position: relative;
-    border: 1px black solid;
 }
 
 /* AilDrawTitle */
@@ -190,4 +174,13 @@ body {
     border-radius: 8px;
     border: 1px #2C2C2C solid;
     color: #F5F5F5;
+}
+
+/* Frame2 */
+.Frame2 {
+    align-self: stretch;
+    height: 100%;
+    width: 75%;
+    position: relative;
+    border: 1px black solid;
 }

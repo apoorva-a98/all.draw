@@ -118,7 +118,6 @@ function moveBall() {
 function steerBall(angles) {
   // Update the ball position based on yaw and pitch
   ballX += angles.yaw * 0.25;   // Reduced speed for yaw
-  ballX += angles.roll * 0.5;   
   
   // Check if pitch exceeds the threshold to allow vertical movement
   if (angles.pitch < 90) {
