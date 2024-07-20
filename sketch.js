@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     });
 
     document.getElementById('saveArtButton').addEventListener('click', function() {
+        console.log('click')
         saveArt();
     });
 });
@@ -58,8 +59,14 @@ function loadSketch(sketchName) {
 
 function saveArt() {
     const frame2 = document.querySelector('.Frame2');
+    if (!frame2) {
+        console.error('Frame2 element not found');
+        return;
+    }
     const canvas = frame2.querySelector('canvas');
     if (canvas) {
+        console.log('click');
+
         // Use p5.js function to save the canvas as an image
         saveCanvas(canvas, 'artwork', 'png');
         // Remove the canvas after saving
