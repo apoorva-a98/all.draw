@@ -1,21 +1,21 @@
 let currentSketch;
+loadSketch('neckTracking.js');
 
 document.addEventListener('DOMContentLoaded', (event) => {
-    document.getElementById('fingerButton').addEventListener('click', function() {
-        loadSketch('handTracking.js');
-    });
+    // document.getElementById('fingerButton').addEventListener('click', function() {
+    //     loadSketch('handTracking.js');
+    // });
 
-    document.getElementById('noseButton').addEventListener('click', function() {
-        loadSketch('noseTracking.js');
-    });
+    // document.getElementById('noseButton').addEventListener('click', function() {
+    //     loadSketch('noseTracking.js');
+    // });
 
-    document.getElementById('minuteNeckButton').addEventListener('click', function() {
-        loadSketch('neckTracking.js');
-    });
+    // document.getElementById('minuteNeckButton').addEventListener('click', function() {
+    // });
 
-    document.getElementById('moveAroundButton').addEventListener('click', function() {
-        loadSketch('moveAround.js');
-    });
+    // document.getElementById('moveAroundButton').addEventListener('click', function() {
+    //     loadSketch('moveAround.js');
+    // });
 
     document.getElementById('saveArtButton').addEventListener('click', function() {
         saveArt();

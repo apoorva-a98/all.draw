@@ -29,11 +29,17 @@ function setup() {
   video.size(width, height);
   video.hide();
   // Start detecting faces from the webcam video
-  faceMesh.detectStart(video, gotFaces);
+  faceMesh.detect(video, gotFaces);
   
   // Initialize the ball position at the center of the canvas
   ballX = width / 2;
   ballY = height / 2;
+
+  // Add event listener for Save Art button
+  document.getElementById('saveArtButton').addEventListener('click', () => {
+    saveCanvas('neck-tracking-path', 'png');
+    clearCanvas();
+  });
 }
 
 function draw() {
@@ -142,15 +148,14 @@ function calculateHeadAngles(keypoints) {
   return { yaw, pitch, roll };
 }
 
+function clearCanvas() {
+  path = [];
+  clear();
+}
+
 // Cleanup function to be called when sketch is stopped
 function remove() {
-    faceMesh.detectStop(); // Stop the faceMesh detection
-    video.remove(); // Remove video capture
-    clear(); // Clear the canvas
-  }
-
-  // // Save canvas as an image when mouse is clicked
-function mousePressed() {
-
-  saveCanvas('neck-tracking-path', 'png');
+  faceMesh.detectStop(); // Stop the faceMesh detection
+  video.remove(); // Remove video capture
+  clear(); // Clear the canvas
 }
