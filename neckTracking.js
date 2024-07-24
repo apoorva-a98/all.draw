@@ -21,22 +21,9 @@ function preload() {
 }
 
 function setup() {
-
-  let container = getElementById("canvasContainer");
-
   let myCanvas = createCanvas(windowWidth, windowHeight);
   myCanvas.parent("canvasContainer"); // Use the ID of the div where you want the canvas to be
-
-  // Get the dimensions of Frame2
-  let frame2 = select('.Frame2');
-  let frameWidth = frame2.width();
-  let frameHeight = frame2.height();
   frameRate(20); // Set the frame rate to 15 frames per second
-
-
-
-  // // Set the canvas dimensions to match Frame2
-  // myCanvas.size(frameWidth, frameHeight);
   
   // Create the webcam video and hide it
   video = createCapture(VIDEO);
@@ -50,8 +37,29 @@ function setup() {
   ballY = height / 2;
 
   document.getElementById('saveArtButton').addEventListener('click', function() {
+
+    let ctx = canvas.getContext('2d');
+    let text1 = "all.draw";
+
+    // Set the font properties
+    let fontFamily = 'Lexend, Inter, Sans-serif';
+    let fontSize = '48px';
+    let fontWeight = '800';
+
+// Set the font style
+ctx.font = `${fontWeight} ${fontSize} ${fontFamily}`;
+
+    // text1.style
+    // text1.style.fontFamily = "Lexend";
+    // // Lexend, Inter, sans-serif
+    let text2 = " by " + document.getElementById('artistname').value;
+
+    ctx.fillText(text1, 10, 50); // 30 is a little lower than y=10 to account for font size
+    let canvasHeight = canvas.clientHeight;
+    ctx.fillText(text2, 10, canvasHeight - 20); // Adjust y for font size
+
     // saveArt();
-    saveCanvas('neck-tracking-path', 'png');
+    saveCanvas(text2, 'png');
     clearCanvas();
 });
 }
