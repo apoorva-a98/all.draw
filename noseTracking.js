@@ -3,6 +3,8 @@ let bodyPose;
 let poses = [];
 let keypointIndex = 0; // Index of the keypoint to track (e.g., 0 for nose, 5 for left shoulder, etc.)
 let path = []; // Array to store the path of the keypoint
+let containerWidth;
+let containerHeight;
 
 function preload() {
   // Load the bodyPose model
@@ -10,21 +12,37 @@ function preload() {
 }
 
 function setup() {
-    let myCanvas = createCanvas(640, 480);
-    myCanvas.parent("canvasContainer"); // Use the ID of the div where you want the canvas to be
+  let container = select("#canvasContainer");
+  // containerWidth = container.width;
+  // containerHeight = container.height;
 
-  // Create the video and hide it
+  // let aspectRatio = 640 / 480; // Original video aspect ratio
+
+  // if (containerWidth / containerHeight > aspectRatio) {
+  //     canvasWidth = containerHeight * aspectRatio;
+  //     canvasHeight = containerHeight;
+  // } else {
+  //     canvasWidth = containerWidth;
+  //     canvasHeight = containerWidth / aspectRatio;
+  // }
+
+  let myCanvas = createCanvas(container.width, container.height);
+  myCanvas.parent("canvasContainer");
+
   video = createCapture(VIDEO);
-  video.size(width, height);
+  // video.size(width, height);
   video.hide();
 
-  // Start detecting poses in the webcam video
-  bodyPose.detectStart(video, gotPoses);
+  bodyPose.detectStart(video, gotPoses);;
 }
 
 function draw() {
-  // Draw the webcam video
-  image(video, 0, 0, width, height);
+  // Mirror the video
+  // push();
+  translate(width, 0);  // Move to the right
+  scale(-1, 1);         // Flip horizontally
+  // image(video, 0, 0, windowWidth, windowHeight);
+  image(video, 0, 0, video.width, video.height);
 
   // Draw the path of the keypoint
   noFill();
@@ -46,6 +64,7 @@ function draw() {
       circle(keypoint.x, keypoint.y, 10);
     }
   }
+  // pop();
 }
 
 function gotPoses(results) {
@@ -58,19 +77,19 @@ function updatePath() {
   if (poses.length > 0) {
     let pose = poses[0];
     let keypoint = pose.keypoints[keypointIndex];
-    if (keypoint.score > 0.1) {
+    if (keypoint.score > 0.01) {
       path.push(createVector(keypoint.x, keypoint.y));
     }
   }
 }
 
-function distance(p1, p2) {
-  return dist(p1.x, p1.y, p2.x, p2.y);
-}
+// function distance(p1, p2) {
+//   return dist(p1.x, p1.y, p2.x, p2.y);
+// }
 
-function angle(p1, p2) {
-  return atan2(p2.y - p1.y, p2.x - p1.x);
-}
+// function angle(p1, p2) {
+//   return atan2(p2.y - p1.y, p2.x - p1.x);
+// }
 
 // Cleanup function to be called when sketch is stopped
 function remove() {

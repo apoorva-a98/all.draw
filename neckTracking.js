@@ -27,7 +27,7 @@ function preload() {
   // Load the faceMesh model
   faceMesh = ml5.faceMesh(options);
 }
-
+A
 function setup() {
   let myCanvas = createCanvas(windowWidth, windowHeight);
   myCanvas.parent("canvasContainer"); // Use the ID of the div where you want the canvas to be
