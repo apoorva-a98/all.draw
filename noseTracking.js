@@ -3,7 +3,11 @@ let video;
 let faces = [];
 let options = { maxFaces: 1, refineLandmarks: false, flipHorizontal: true};
 
-
+let shapes = []; // Array to store random shapes
+let shapeTimer = 0;
+let nosePath = []; // Store the path of the moving nose
+let lastNoseVector = null; // Store the last nose position to calculate movement threshold
+const movementThreshold = 30; // Minimum movement required to register a new point
 let paths = []; 
 let currentPath = [];
 let drawingEnabled = false; // Track if drawing is enabled or not
@@ -28,7 +32,7 @@ A
 function setup() {
   let myCanvas = createCanvas(windowWidth, windowHeight);
   myCanvas.parent("canvasContainer"); // Use the ID of the div where you want the canvas to be
-//   frameRate(27.5); 
+  frameRate(35); 
   
   // Create the webcam video and hide it
   video = createCapture(VIDEO);
@@ -36,6 +40,8 @@ function setup() {
   video.hide();
   // Start detecting faces from the webcam video
   faceMesh.detectStart(video, gotFaces);
+
+  shapeTimer = millis(); // Start the timer when the sketch runs
 
   // Setup speech recognition
   // myRec = new p5.SpeechRec('en-US', parseResult);
@@ -95,14 +101,97 @@ function draw() {
         let movementX = map(yaw, -30, 30, -200, 200);   // The more sideways, the more X shift
         let movementY = map(pitch, -30, 30, -200, 50);   // The more up/down, the more Y shift
 
+        // Convert movement into a vector
+        let newNoseVector = createVector(noseX + movementX * 2, noseY + movementY * 2);
+
+        // Apply smoothing - prevent small jittery movements
+        if (lastNoseVector) {
+            let distance = dist(newNoseVector.x, newNoseVector.y, lastNoseVector.x, lastNoseVector.y);
+
+            if (distance > movementThreshold) { // Only register movement above threshold
+                let smoothedVector = p5.Vector.lerp(lastNoseVector, newNoseVector, 0.2); // Smooth transition
+                nosePath.push(smoothedVector);
+                lastNoseVector = smoothedVector;
+            }
+        } else {
+            lastNoseVector = newNoseVector; // Initialize first position
+            nosePath.push(newNoseVector);
+        }
         // Draw a circle at the nose position
         fill(255, 0, 0); // Red color for nose
         noStroke();
-        // ellipse(noseX, noseY, 15, 15); // Larger red dot at nose
+        ellipse(noseX, noseY, 25, 25); // Larger red dot at nose
+        ellipse(lastNoseVector.x, lastNoseVector.y, 25, 25); // Nose moves dynamically
+        stroke(0, 0, 255);
+        strokeWeight(5);
+        line(noseX, noseY, lastNoseVector.x, lastNoseVector.y);
         // Draw dynamically moving nose circle
-        ellipse(noseX + movementX * 2, noseY + movementY * 2, 15, 15); // Nose moves dynamically
+        // ellipse(noseX + movementX * 2, noseY + movementY * 2, 25, 25); // Nose moves dynamically
+
+        // line(noseX, noseY, noseX + movementX * 2, noseY + movementY * 2);
+        
+        // Draw the path of the nose movement
+        noFill();
+        stroke(0);
+        strokeWeight(2);
+        beginShape();
+        for (let pt of nosePath) {
+            vertex(pt.x, pt.y);
+        }
+        endShape();
     }   
+    
+    // // Call the function to draw the shapes
+    // drawShapes();
+
+    // // Generate random shapes for 1 minute
+    // if (millis() - shapeTimer < 60000) { // If less than 1 minute has passed
+    //     if (frameCount % 60000 === 0) { // Spawn a shape every second
+    //     spawnRandomShape();
+    //     }
+    // }
 }
+
+// function spawnRandomShape() {
+//     let shapeType = int(random(3)); // Randomly choose between 4 types of shapes
+//     let x = random(50,width-50);
+//     let y = random(50,height-50);
+//     // let size = random(100, 200);
+//     // let color = color(random(255), random(255), random(255));
+//     let size = 100;
+//     let color = color(0);
+  
+//     switch (shapeType) {
+//       case 0:
+//         shapes.push({ type: 'triangle', x1: x, y1: y, x2: x + size, y2: y, x3: x + size / 2, y3: y - size, color });
+//         break;
+//       case 1:
+//         shapes.push({ type: 'rectangle', x: x, y: y, w: size, h: size, color });
+//         break;
+//       case 2:
+//         shapes.push({ type: 'circle', x: x, y: y, r: size / 2, color });
+//         break;
+//     }
+//   }
+  
+//   function drawShapes() {
+//     for (let shape of shapes) {
+//       fill(shape.color);
+//       stroke(shape.color);
+//       strokeWeight(5);
+//       switch (shape.type) {
+//         case 'triangle':
+//           triangle(shape.x1, shape.y1, shape.x2, shape.y2, shape.x3, shape.y3);
+//           break;
+//         case 'rectangle':
+//           rect(shape.x, shape.y, shape.w, shape.h);
+//           break;
+//         case 'circle':
+//           ellipse(shape.x, shape.y, shape.r * 2, shape.r * 2);
+//           break;
+//       }
+//     }
+//   }
 
 
 // Callback function for when faceMesh outputs data

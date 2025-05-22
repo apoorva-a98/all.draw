@@ -1,3 +1,5 @@
+// Pen by Vinzel. from <a href="https://thenounproject.com/browse/icons/term/pen/" target="_blank" title="Pen Icons">Noun Project</a> (CC BY 3.0)
+
 let faceMesh;
 let video;
 let faces = [];
@@ -15,6 +17,9 @@ let usingVoiceControl = false; // Track if voice control is active or not
 let myRec;
 let speechRec;
 
+let penImg;
+let printing = false;
+
 
 // Indices for specific eyes and nose landmarks
 const leftEyeIndex = 130;  // Left eye
@@ -24,10 +29,10 @@ const upperLipIndex = 13;  // Upper lip
 const lowerLipIndex = 14;  // Lower lip
 
 function preload() {
-  // Load the faceMesh model
   faceMesh = ml5.faceMesh(options);
+  penImg = loadImage('pen.png'); 
 }
-A
+
 function setup() {
   let myCanvas = createCanvas(windowWidth, windowHeight);
   myCanvas.parent("canvasContainer"); // Use the ID of the div where you want the canvas to be
@@ -61,18 +66,27 @@ function setup() {
     // Set the font style
     ctx.font = `${fontWeight} ${fontSize} ${fontFamily}`;
 
+    printing = true; // To hide pen before printing
+
     // text1.style
     // text1.style.fontFamily = "Lexend";
     // // Lexend, Inter, sans-serif
     let text2 = " by " + document.getElementById('artistname').value;
+    
+    setTimeout(() => {
 
-    ctx.fillText(text1, 10, 50); // 30 is a little lower than y=10 to account for font size
+    ctx.fillText(text1, 30, 80); // 30 is a little lower than y=10 to account for font size
     let canvasHeight = canvas.clientHeight;
     ctx.fillText(text2, 10, canvasHeight - 20); // Adjust y for font size
 
+      window.print();
+      printing = false; // Reset after print (in case user returns)
+      clearCanvas();
+    }, 100);
     // saveArt();
-    saveCanvas(text2, 'png');
-    clearCanvas();
+    // saveCanvas(text2, 'png');
+    // window.print();
+    // clearCanvas();
   });
 }
 
@@ -96,6 +110,8 @@ function draw() {
       ];
 
       isMouthOpen(face.keypoints);
+
+      const nose = face.keypoints[noseIndex];
 
       // Calculate and display yaw, pitch, and roll
       let angles = calculateHeadAngles(face.keypoints);
@@ -181,7 +197,11 @@ function steerBall(angles) {
   ballY = constrain(ballY, 50, windowHeight-50);
   
   moveBall();
-  circle(ballX, ballY, 10);
+  circle(ballX, ballY, 2);
+       if (!printing && penImg) {
+        imageMode(CENTER);
+        image(penImg, ballX+24, ballY-45, 50, 90); // Adjust size as needed
+      }
 
   if (drawingEnabled) {
     // Only add points to the path if drawing is enabled
@@ -300,8 +320,9 @@ function parseResult() {
 
 function clearCanvas() {
   currentPath = [];
+  paths = [];
   clear();
-  let drawingEnabled = false;
+  drawingEnabled = false;
 }
 
 // // Cleanup function to be called when sketch is stopped
