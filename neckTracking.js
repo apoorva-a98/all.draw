@@ -54,34 +54,35 @@ function setup() {
   // myRec.start(true, false); // Start continuous recognition, no interim results
 
   document.getElementById('saveArtButton').addEventListener('click', function() {
-
-    let ctx = canvas.getContext('2d');
-    let text1 = "all.draw";
-
-    // Set the font properties
-    let fontFamily = 'Lexend, Inter, Sans-serif';
-    let fontSize = '48px';
-    let fontWeight = '800';
-
-    // Set the font style
-    ctx.font = `${fontWeight} ${fontSize} ${fontFamily}`;
-
+    
     printing = true; // To hide pen before printing
-
-    // text1.style
-    // text1.style.fontFamily = "Lexend";
-    // // Lexend, Inter, sans-serif
-    let text2 = " by " + document.getElementById('artistname').value;
     
     setTimeout(() => {
+      let ctx = canvas.getContext('2d');
+      let text1 = "all.draw";
 
-    ctx.fillText(text1, 30, 80); // 30 is a little lower than y=10 to account for font size
-    let canvasHeight = canvas.clientHeight;
-    ctx.fillText(text2, 10, canvasHeight - 20); // Adjust y for font size
+      // Set the font properties
+      let fontFamily = 'Lexend, Inter, Sans-serif';
+      let fontSize = '48px';
+      let fontWeight = '800';
 
-      window.print();
-      printing = false; // Reset after print (in case user returns)
-      clearCanvas();
+      // Set the font style
+      ctx.font = `${fontWeight} ${fontSize} ${fontFamily}`;
+
+      // text1.style
+      // text1.style.fontFamily = "Lexend";
+      // // Lexend, Inter, sans-serif
+      let text2 = " by " + document.getElementById('artistname').value;
+      
+
+
+      ctx.fillText(text1, 30, 80); // 30 is a little lower than y=10 to account for font size
+      let canvasHeight = canvas.clientHeight;
+      ctx.fillText(text2, 10, canvasHeight - 20); // Adjust y for font size
+      
+        window.print();
+        printing = false; // Reset after print (in case user returns)
+        clearCanvas();
     }, 100);
     // saveArt();
     // saveCanvas(text2, 'png');
