@@ -12,7 +12,8 @@ body {
 }
 
 h2{
-    font-weight: 400;
+    font-weight: 200;
+    font-size: 22px;
 }
 
 /* AilDraw */
@@ -27,23 +28,9 @@ h2{
     display: inline-flex;
 }
 
-/* Frame1 */
-/* .Frame1 {
-    align-self: stretch;
-    height: 100%;
-    width: 25%;
-    padding: 43px 24px;
-    border: 1px black solid;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
-    gap: 34px;
-    display: inline-flex;
-} */
-
 .Frame1 {
     align-self: stretch;
-    height: 95vh; /* Set height to 95% of viewport height */
+    height: 98vh; /* Set height to 95% of viewport height */
     width: 25%;
     padding: 43px 24px;
     border: 1px black solid;
@@ -57,7 +44,7 @@ h2{
 /* Frame2 */
 .Frame2 {
     align-self: stretch;
-    height: 95vh; /* Set height to 95% of viewport height */
+    height: 98vh; /* Set height to 95% of viewport height */
     width: 75%;
     position: relative;
     border: 1px black solid;
@@ -78,23 +65,11 @@ h2{
     color: black;
     font-size: 72px;
     font-weight: 700;
-    line-height: 86.40px;
+    line-height: 72px;
     word-wrap: break-word;
     margin: 0 0 0 0;
 }
 
-/* Frame3 */
-.Frame3 {
-    align-self: stretch;
-    height: 331px;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
-    gap: 24px;
-    display: flex;
-}
-
-/* DrawWith */
 .DrawWith {
     align-self: stretch;
     height: 43px;
@@ -157,6 +132,17 @@ h2{
 }
 
 /* ByArtist */
+.UploadImage {
+    align-self: stretch;
+    /* height: 43px; */
+    color: black;
+    font-size: 32px;
+    font-weight: 400;
+    line-height: 38.40px;
+    word-wrap: break-word;
+    margin: 5 0 0 0;
+}
+
 .ByArtist {
     align-self: stretch;
     /* height: 43px; */
@@ -191,6 +177,14 @@ h2{
     display: flex;
 }
 
+.Frame4 {
+    align-self: stretch;
+    /* flex: 1 1 0;
+    justify-content: flex-end;
+    align-items: center; */
+    /* gap: 10px; */
+    /* display: flex; */
+}
 /* Frame6 */
 .Frame6 {
     align-self: stretch;

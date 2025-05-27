@@ -19,6 +19,7 @@ let speechRec;
 
 let penImg;
 let printing = false;
+let uploadedBgImg = null;
 
 
 // Indices for specific eyes and nose landmarks
@@ -90,13 +91,52 @@ function setup() {
     // window.print();
     // clearCanvas();
   });
+
+  document.getElementById('imageUploadInput').addEventListener('change', function (event) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        uploadedBgImg = loadImage(e.target.result); // Load uploaded image as p5.Image
+      };
+      reader.readAsDataURL(file);
+    }
+  });
 }
+
+function drawUploadedBackground() {
+  if (uploadedBgImg && !printing) {
+    push();
+    imageMode(CENTER);
+    tint(255, 178); // 70% opacity
+
+    let canvasAspect = width / height;
+    let imgAspect = uploadedBgImg.width / uploadedBgImg.height;
+
+    let drawWidth, drawHeight;
+
+    if (imgAspect > canvasAspect) {
+      drawHeight = height * 0.5;
+      drawWidth = drawHeight * imgAspect;
+    } else {
+      drawWidth = width * 0.5;
+      drawHeight = drawWidth / imgAspect;
+    }
+
+    image(uploadedBgImg, width / 3, height / 2, drawWidth, drawHeight); // Centered position
+    pop();
+  } else {
+    background(255);
+  }
+}
+
 
 function draw() {
   // if (!drawingEnabled) return;
   // Draw the webcam video
   // image(video, 0, 0, width, height);
-  background(255);
+  clear();
+  drawUploadedBackground();
 
   // Draw the reference points
   for (let i = 0; i < faces.length; i++) {
