@@ -118,8 +118,9 @@ h2{
     align-items: center;
     gap: 8px;
     display: inline-flex;
-    font-size: 16px;
-    font-weight: 50;
+    font-family: lexend, Inter, sans-serif;
+    font-size: 20px;
+    font-weight: 30;
     line-height: 20px;
     word-wrap: break-word;
 }

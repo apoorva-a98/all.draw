@@ -80,12 +80,13 @@ function setup() {
       let canvasHeight = canvas.clientHeight;
       ctx.fillText(text2, 10, canvasHeight - 20); // Adjust y for font size
       
-        window.print();
+      saveCanvas(text2, 'png');
+        // window.print();
         printing = false; // Reset after print (in case user returns)
         clearCanvas();
     }, 100);
     // saveArt();
-    // saveCanvas(text2, 'png');
+  
     // window.print();
     // clearCanvas();
   });
