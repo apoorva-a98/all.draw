@@ -43,7 +43,7 @@ function setup() {
   
   // Create the webcam video and hide it
   video = createCapture(VIDEO);
-  video.size(width, height);
+  video.size(windowWidth, windowHeight);
   video.hide();
   // Start detecting faces from the webcam video
   faceMesh.detectStart(video, gotFaces);
@@ -56,10 +56,10 @@ function setup() {
 
   // Define color circles with positions and radii
   cornerCircles = [
-    { x: 50, y: 50, color: color(0, 0, 255), name: 'blue' },   // top-left
-    { x: width - 50, y: 50, color: color(0, 128, 0), name: 'green' }, // top-right
-    { x: 50, y: height - 100, color: color(255, 0, 0), name: 'red' }, // bottom-left
-    { x: width - 50, y: height - 100, color: color(0), name: 'black' } // bottom-right
+    { x: 0, y: 0, color: color(0, 0, 255), name: 'blue' },   // top-left
+    { x: windowWidth -50, y: 0, color: color(0, 128, 0), name: 'green' }, // top-right
+    { x: 0, y: windowHeight- 100, color: color(255, 0, 0), name: 'red' }, // bottom-left
+    { x: windowWidth-50, y: windowHeight-100, color: color(0), name: 'black' } // bottom-right
   ];
 
   // Setup speech recognition
@@ -68,6 +68,9 @@ function setup() {
 
   document.getElementById('saveArtButton').addEventListener('click', function() {
 
+    printing = true; // To hide pen before printing
+    
+    setTimeout(() => {
     let ctx = canvas.getContext('2d');
     let text1 = "all.draw";
 
@@ -79,30 +82,19 @@ function setup() {
     // Set the font style
     ctx.font = `${fontWeight} ${fontSize} ${fontFamily}`;
 
-    printing = true; // To hide pen before printing
-
-    // text1.style
-    // text1.style.fontFamily = "Lexend";
-    // // Lexend, Inter, sans-serif
-    // let text2 = " by " + document.getElementById('artistname').value;
     let title = document.getElementById('artworkTitle')?.value || "";
     let artist = document.getElementById('artistname').value || "";
     let text2 = `${title} by ${artist}`;
-    
-    setTimeout(() => {
 
     ctx.fillText(text1, 30, 80); // 30 is a little lower than y=10 to account for font size
     let canvasHeight = canvas.clientHeight;
-    ctx.fillText(text2, 10, canvasHeight - 20); // Adjust y for font size
-
-      window.print();
-      printing = false; // Reset after print (in case user returns)
-      clearCanvas();
-    }, 100);
-    // saveArt();
-    // saveCanvas(text2, 'png');
+    ctx.fillText(text2, 30, canvasHeight - 20); // Adjust y for font size
+    
+    saveCanvas(text2, 'png');
     // window.print();
-    // clearCanvas();
+    printing = false; // Reset after print (in case user returns)
+    clearCanvas();
+    }, 100);
   });
 }
 
