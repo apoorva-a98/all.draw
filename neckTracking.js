@@ -20,6 +20,9 @@ let speechRec;
 let penImg;
 let printing = false;
 
+let strokeColor;
+let cornerCircles = [];
+
 
 // Indices for specific eyes and nose landmarks
 const leftEyeIndex = 130;  // Left eye
@@ -49,44 +52,55 @@ function setup() {
   ballX = width / 2;
   ballY = height / 2;
 
+  strokeColor = color(0); // default black
+
+  // Define color circles with positions and radii
+  cornerCircles = [
+    { x: 50, y: 50, color: color(0, 0, 255), name: 'blue' },   // top-left
+    { x: width - 50, y: 50, color: color(0, 128, 0), name: 'green' }, // top-right
+    { x: 50, y: height - 100, color: color(255, 0, 0), name: 'red' }, // bottom-left
+    { x: width - 50, y: height - 100, color: color(0), name: 'black' } // bottom-right
+  ];
+
   // Setup speech recognition
   // myRec = new p5.SpeechRec('en-US', parseResult);
   // myRec.start(true, false); // Start continuous recognition, no interim results
 
   document.getElementById('saveArtButton').addEventListener('click', function() {
-    
+
+    let ctx = canvas.getContext('2d');
+    let text1 = "all.draw";
+
+    // Set the font properties
+    let fontFamily = 'Lexend, Inter, Sans-serif';
+    let fontSize = '48px';
+    let fontWeight = '800';
+
+    // Set the font style
+    ctx.font = `${fontWeight} ${fontSize} ${fontFamily}`;
+
     printing = true; // To hide pen before printing
+
+    // text1.style
+    // text1.style.fontFamily = "Lexend";
+    // // Lexend, Inter, sans-serif
+    // let text2 = " by " + document.getElementById('artistname').value;
+    let title = document.getElementById('artworkTitle')?.value || "";
+    let artist = document.getElementById('artistname').value || "";
+    let text2 = `${title} by ${artist}`;
     
     setTimeout(() => {
-      let ctx = canvas.getContext('2d');
-      let text1 = "all.draw";
 
-      // Set the font properties
-      let fontFamily = 'Lexend, Inter, Sans-serif';
-      let fontSize = '48px';
-      let fontWeight = '800';
+    ctx.fillText(text1, 30, 80); // 30 is a little lower than y=10 to account for font size
+    let canvasHeight = canvas.clientHeight;
+    ctx.fillText(text2, 10, canvasHeight - 20); // Adjust y for font size
 
-      // Set the font style
-      ctx.font = `${fontWeight} ${fontSize} ${fontFamily}`;
-
-      // text1.style
-      // text1.style.fontFamily = "Lexend";
-      // // Lexend, Inter, sans-serif
-      let text2 = " by " + document.getElementById('artistname').value;
-      
-
-
-      ctx.fillText(text1, 30, 80); // 30 is a little lower than y=10 to account for font size
-      let canvasHeight = canvas.clientHeight;
-      ctx.fillText(text2, 10, canvasHeight - 20); // Adjust y for font size
-      
-      saveCanvas(text2, 'png');
-        // window.print();
-        printing = false; // Reset after print (in case user returns)
-        clearCanvas();
+      window.print();
+      printing = false; // Reset after print (in case user returns)
+      clearCanvas();
     }, 100);
     // saveArt();
-  
+    // saveCanvas(text2, 'png');
     // window.print();
     // clearCanvas();
   });
@@ -125,7 +139,8 @@ function draw() {
         // Draw the path of the keypoint
         noFill();
         // stroke(0, 0, 255);
-        stroke(0)
+        // stroke(0)
+        stroke(strokeColor);
         strokeWeight(2);
         for (let path of paths) {
           beginShape();
@@ -140,6 +155,11 @@ function draw() {
         }
         endShape();
     }
+  }
+  for (let c of cornerCircles) {
+    fill(c.color);
+    noStroke();
+    ellipse(c.x, c.y, 50, 50);
   }
 }
 
@@ -157,6 +177,7 @@ function moveBall() {
   ballX = constrain(ballX, 50, windowHeight+200);
   ballY = constrain(ballY, 50, windowHeight-50);
 }
+
 
 function steerBall(angles) {
   // Update the ball position based on yaw and pitch
@@ -204,6 +225,13 @@ function steerBall(angles) {
         imageMode(CENTER);
         image(penImg, ballX+24, ballY-45, 50, 90); // Adjust size as needed
       }
+
+  for (let c of cornerCircles) {
+    let d = dist(ballX, ballY, c.x, c.y);
+    if (d < 30) { // 30 is slightly less than radius for trigger
+      strokeColor = c.color;
+    }
+  }
 
   if (drawingEnabled) {
     // Only add points to the path if drawing is enabled
