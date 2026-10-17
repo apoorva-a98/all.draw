@@ -8,7 +8,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.4/p5.min.js"></script>
-  <script src="https://unpkg.com/ml5@1.0.1/dist/ml5.min.js"></script>
+  <script src="https://unpkg.com/ml5@0.20.0-alpha.4/dist/ml5.min.js"></script>
 </head>
 <body>
 
@@ -22,6 +22,8 @@
       <strong>All.draw.learn</strong>
     </div>
     <div class="title-section">
+      <span class="label">Trace Image</span>
+      <input type="file" id="imageUploadInput" accept="image/*" />
       <span class="label">Title</span>
       <input type="text" id="artworkTitle" placeholder="Artwork Name" />
       <span class="label">By Artist</span>
@@ -30,6 +32,8 @@
     <button id="saveArtButton">★ Save Art</button>
   </div>
 
+  <!-- <script src="libraries/p5.speech.js"></script> -->
   <script src="neckTracking.js"></script>
+  <!-- <script src="noseTracking.js"></script> -->
 </body>
 </html>

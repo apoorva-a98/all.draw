@@ -6,19 +6,24 @@ let faces = [];
 let options = { maxFaces: 1, refineLandmarks: false, flipHorizontal: true };
 
 let ballX, ballY;
-let ballSize = 10;
-let ballSpeed = 0.0000000000000001;
-let steerX = 0, steerY = 0;
-let paths = []; 
+// Redundant: never used
+// let ballSize = 10;
+// Redundant: only used by moveBall(), which is commented out below
+// let ballSpeed = 0.0000000000000001;
+// Redundant: never used
+// let steerX = 0, steerY = 0;
+let paths = [];
 let currentPath = [];
 let drawingEnabled = false; // Track if drawing is enabled or not
 let usingMouthControl = false; // Track if mouth control is active or not
 let usingVoiceControl = false; // Track if voice control is active or not
-let myRec;
-let speechRec;
+// Redundant: voice mode is commented out, so these are never used
+// let myRec;
+// let speechRec;
 
 let penImg;
 let printing = false;
+let uploadedBgImg = null;
 
 let strokeColor;
 let cornerCircles = [];
@@ -96,36 +101,78 @@ function setup() {
     clearCanvas();
     }, 100);
   });
+
+  document.getElementById('imageUploadInput').addEventListener('change', function (event) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        uploadedBgImg = loadImage(e.target.result); // Load uploaded image as p5.Image
+      };
+      reader.readAsDataURL(file);
+    }
+  });
 }
+
+function drawUploadedBackground() {
+  if (uploadedBgImg && !printing) {
+    push();
+    imageMode(CENTER);
+    tint(255, 178); // 70% opacity
+
+    let canvasAspect = width / height;
+    let imgAspect = uploadedBgImg.width / uploadedBgImg.height;
+
+    let drawWidth, drawHeight;
+
+    if (imgAspect > canvasAspect) {
+      drawHeight = height * 0.5;
+      drawWidth = drawHeight * imgAspect;
+    } else {
+      drawWidth = width * 0.5;
+      drawHeight = drawWidth / imgAspect;
+    }
+
+    image(uploadedBgImg, width / 3, height / 2, drawWidth, drawHeight); // Centered position
+    pop();
+  } else {
+    background(255);
+  }
+}
+
 
 function draw() {
   // if (!drawingEnabled) return;
   // Draw the webcam video
   // image(video, 0, 0, width, height);
-  background(255);
+  clear();
+  drawUploadedBackground();
 
   // Draw the reference points
   for (let i = 0; i < faces.length; i++) {
     let face = faces[i];
     
     if (face.keypoints.length > 0) {
-      const keypointsToDraw = [
-        face.keypoints[leftEyeIndex],
-        face.keypoints[rightEyeIndex],
-        face.keypoints[noseIndex],
-        face.keypoints[upperLipIndex],
-        face.keypoints[lowerLipIndex],
-      ];
+      // Redundant: this array is built every frame but never used
+      // const keypointsToDraw = [
+      //   face.keypoints[leftEyeIndex],
+      //   face.keypoints[rightEyeIndex],
+      //   face.keypoints[noseIndex],
+      //   face.keypoints[upperLipIndex],
+      //   face.keypoints[lowerLipIndex],
+      // ];
 
       isMouthOpen(face.keypoints);
 
-      const nose = face.keypoints[noseIndex];
+      // Redundant: never used (calculateHeadAngles reads the nose itself)
+      // const nose = face.keypoints[noseIndex];
 
       // Calculate and display yaw, pitch, and roll
       let angles = calculateHeadAngles(face.keypoints);
-      fill(0);
-      textSize(16);
-      
+      fill(0); // Keep: fills the pen-tip dot drawn in steerBall()
+      // Redundant: no p5 text() is drawn (the print labels set ctx.font themselves)
+      // textSize(16);
+
       // Update the ball position based on angles
       steerBall(angles);
         // Draw the path of the keypoint
@@ -160,15 +207,17 @@ function gotFaces(results) {
   faces = results;
 }
 
-function moveBall() {
-  // Move the ball with some constant speed
-  ballX += ballSpeed;
-  ballY += ballSpeed;
-
-  // Constrain the ball within the canvas
-  ballX = constrain(ballX, 50, windowHeight+200);
-  ballY = constrain(ballY, 50, windowHeight-50);
-}
+// Redundant: ballSpeed is 1e-16, so this never visibly moves the pen, and the
+// constrain() calls repeat the ones already at the end of steerBall()
+// function moveBall() {
+//   // Move the ball with some constant speed
+//   ballX += ballSpeed;
+//   ballY += ballSpeed;
+//
+//   // Constrain the ball within the canvas
+//   ballX = constrain(ballX, 50, windowHeight+200);
+//   ballY = constrain(ballY, 50, windowHeight-50);
+// }
 
 
 function steerBall(angles) {
@@ -186,9 +235,10 @@ function steerBall(angles) {
   else if (angles.pitch > 100) {
     dy -= angles.pitch * 0.025; // Increased impact for pitch
   }
-  else {
-    dy = 0;
-  }
+  // Redundant: dy already starts at 0
+  // else {
+  //   dy = 0;
+  // }
 
   // Normalize the direction vector (dx, dy)
   let magnitude = Math.sqrt(dx * dx + dy * dy);
@@ -203,15 +253,17 @@ function steerBall(angles) {
   if (angles.pitch < 90 || angles.pitch > 100) {
     ballY += dy * speed;
   }
-  else {
-    ballY += 0;
-  }
-  
+  // Redundant: adding 0 does nothing
+  // else {
+  //   ballY += 0;
+  // }
+
   // Constrain the ball within the canvas
   ballX = constrain(ballX, 50, windowHeight+200);
   ballY = constrain(ballY, 50, windowHeight-50);
-  
-  moveBall();
+
+  // Redundant: see moveBall() above
+  // moveBall();
   circle(ballX, ballY, 2);
        if (!printing && penImg) {
         imageMode(CENTER);
@@ -231,15 +283,16 @@ function steerBall(angles) {
   }
 }
 
-function drawVectorPath(x, y, size) {
-  // Draw a custom vector path instead of an ellipse
-  noFill();
-  stroke(255, 0, 0);
-  strokeWeight(3);
-  beginShape();
-  vertex(x, y);
-  endShape(CLOSE);
-}
+// Redundant: never called
+// function drawVectorPath(x, y, size) {
+//   // Draw a custom vector path instead of an ellipse
+//   noFill();
+//   stroke(255, 0, 0);
+//   strokeWeight(3);
+//   beginShape();
+//   vertex(x, y);
+//   endShape(CLOSE);
+// }
 
 function calculateHeadAngles(keypoints) {
   const leftEye = keypoints[leftEyeIndex];
@@ -262,12 +315,14 @@ function calculateHeadAngles(keypoints) {
   return { yaw, pitch, roll };
 }
 
-// Cleanup function to be called when sketch is stopped
-function remove() {
-    faceMesh.detectStop(); // Stop the faceMesh detection
-    video.remove(); // Remove video capture
-    clear(); // Clear the canvas
-}
+// Redundant: nothing calls this (it was meant for the unused sketch.js mode
+// switcher), and defining a global remove() overrides p5's built-in remove()
+// // Cleanup function to be called when sketch is stopped
+// function remove() {
+//     faceMesh.detectStop(); // Stop the faceMesh detection
+//     video.remove(); // Remove video capture
+//     clear(); // Clear the canvas
+// }
 
 function keyPressed() {
   // Toggle between mouth control and Enter key control when 'm' is pressed
@@ -276,20 +331,21 @@ function keyPressed() {
     usingVoiceControl = false; // Track if voice control is active or not
   }
 
-  if (key === 'v') {
-    usingVoiceControl = !usingVoiceControl;
-    if (usingVoiceControl) {
-      // Disable mouth control and Enter key control
-      usingMouthControl = false;
-      drawingEnabled = false;
-      speechRec.start(true, false); // Start speech recognition
-    } else {
-      speechRec.stop(); // Stop speech recognition
-      // Enable Enter key control
-      drawingEnabled = false;
-      usingMouthControl = false;
-    }
-  }
+  // Voice mode disabled for now (speechRec is never set up)
+  // if (key === 'v') {
+  //   usingVoiceControl = !usingVoiceControl;
+  //   if (usingVoiceControl) {
+  //     // Disable mouth control and Enter key control
+  //     usingMouthControl = false;
+  //     drawingEnabled = false;
+  //     speechRec.start(true, false); // Start speech recognition
+  //   } else {
+  //     speechRec.stop(); // Stop speech recognition
+  //     // Enable Enter key control
+  //     drawingEnabled = false;
+  //     usingMouthControl = false;
+  //   }
+  // }
 
   if (!usingMouthControl && !usingVoiceControl) {
     // if (key === ' ') {
@@ -330,15 +386,16 @@ function isMouthOpen(keypoints) {
   }
 }
 
-function parseResult() {
-  if (speechRec.resultString.includes("start")) {
-    drawingEnabled = true;
-  } else if (speechRec.resultString.includes("stop")) {
-    drawingEnabled = false;
-    paths.push(currentPath);
-    currentPath = [];
-  }
-}
+// Voice mode disabled for now
+// function parseResult() {
+//   if (speechRec.resultString.includes("start")) {
+//     drawingEnabled = true;
+//   } else if (speechRec.resultString.includes("stop")) {
+//     drawingEnabled = false;
+//     paths.push(currentPath);
+//     currentPath = [];
+//   }
+// }
 
 function clearCanvas() {
   currentPath = [];
