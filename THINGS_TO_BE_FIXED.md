@@ -66,6 +66,17 @@ Pending fixes and cleanups for the files that aren't in use right now. The live 
 
 ---
 
+## Git / GitHub setup
+
+- [ ] **`git push` from Terminal fails with a password error.** GitHub stopped accepting account passwords for git in 2021, and the login saved in the macOS Keychain is old or invalid ("Invalid username or token"). Fix it with one of:
+  - **GitHub CLI (easiest):** install `gh`, then run `gh auth login` and `gh auth setup-git`, which replaces the saved login.
+    - `brew install gh` fails on macOS 13 until the Command Line Tools are installed (`xcode-select --install`).
+    - Or download the macOS `.pkg` from https://github.com/cli/cli/releases/latest (under **Assets**, click "Show all assets").
+  - **Personal access token:** create one at GitHub → Settings → Developer settings → Personal access tokens. Clear the old login with `printf "host=github.com\nprotocol=https\n\n" | git credential-osxkeychain erase`, then `git push` and paste the token when asked for a password.
+- [ ] **Until then:** push from **GitHub Desktop** (Push origin), which has its own login.
+
+---
+
 ## Other
 
 - [ ] **`V2` branch** loads `ml5@1.0.1` but still passes `flipHorizontal: true` in `neckTracking.js`, so the video may not be mirrored and left/right steering could be reversed.
