@@ -225,7 +225,7 @@ function steerBall(angles) {
   }
 
   // Applying constant speed to the direction
-  const speed = 2; // Adjust this value to set the ball's speed
+  const speed = 0.8; // Adjust this value to set the ball's speed
   ballX += dx * speed;
   if (angles.pitch < 90 || angles.pitch > 100) {
     ballY += dy * speed;

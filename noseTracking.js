@@ -92,7 +92,7 @@ function draw() {
     push();
     translate(width, 0); // Move to the right side
     scale(-1, 1); // Flip horizontally
-    tint(255, 77) //transparency
+    tint(255, 185) //transparency
     image(video, 0, 0, width, height);
     pop();
 
@@ -125,7 +125,6 @@ function draw() {
         }
       } else {
           lastNoseVector = newNoseVector; // Initialize first position
-          nosePath.push(newNoseVector);
       }
       // Draw a circle at the nose position
       fill(255, 0, 0); // Red color for nose
@@ -242,9 +241,6 @@ function keyPressed() {
   }
 
   if (!usingMouthControl && !usingVoiceControl) {
-    // if (key === ' ') {
-    //   drawingEnabled = !drawingEnabled; // Toggle drawing
-    // }
     if(key === 'Enter') {
       drawingEnabled = !drawingEnabled; // Toggle drawing
       if (!drawingEnabled) {
@@ -292,6 +288,7 @@ function parseResult() {
 
 function clearCanvas() {
   currentPath = [];
+  paths = [];
   clear();
   let drawingEnabled = false;
 }
