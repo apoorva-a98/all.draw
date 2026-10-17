@@ -11,9 +11,9 @@ Pending fixes and cleanups for the files that aren't in use right now. The live 
   - how it fits the rule that tools are big and far apart, for users with severe motor disabilities
   - whether they belong in Create or in a separate mode
   - Design: "all.draw Canvas Screen" (the shapes are still there, just hidden); design system: "all.draw", ShapeTool component.
-- [ ] **The image upload is for a follow-along path, not tracing.** It's hidden in the design for now (labelled "Trace Image" in V2's code). Later it should let the therapist upload a custom path for the learner to follow, like the built-in Follow shapes (Butterfly, Star, Leaf). Work out how an uploaded picture becomes a path: an outline? a dashed line? where the start dot goes?
+- [ ] **Decide what Upload Image does.** It's back in the design as "Upload Image" (still "Trace Image" in V2's code), next to the Trace dropdown. The idea: let the therapist upload a custom path for the learner to follow, like the built-in Trace shapes (Butterfly, Star, Leaf). Work out how an uploaded picture becomes a path: an outline? a dashed line? where the start dot goes?
 - [ ] **Switch the code to the colour-blind-safe palette.** The design now uses the Okabe-Ito colours: orange `#E69F00` (replaces red), blue `#0072B2`, green `#009E73`. `neckTracking.js` still uses `color(0, 0, 255)`, `color(0, 128, 0)` and `color(255, 0, 0)` for the corner paints.
-- [ ] **Build the Follow dropdown in the code.** It's in the design (properties bar, right side). The shapes' SVG paths are in the design system's Follow component.
+- [ ] **Build the Trace dropdown in the code.** It's in the design (properties bar, right side). The shapes' SVG paths are in the design system's Trace component.
 
 ---
 
