@@ -225,20 +225,21 @@ function keyPressed() {
     usingVoiceControl = false; // Track if voice control is active or not
   }
 
-  if (key === 'v') {
-    usingVoiceControl = !usingVoiceControl;
-    if (usingVoiceControl) {
-      // Disable mouth control and Enter key control
-      usingMouthControl = false;
-      drawingEnabled = false;
-      speechRec.start(true, false); // Start speech recognition
-    } else {
-      speechRec.stop(); // Stop speech recognition
-      // Enable Enter key control
-      drawingEnabled = false;
-      usingMouthControl = false;
-    }
-  }
+  // Voice mode disabled for now (speechRec is never set up)
+  // if (key === 'v') {
+  //   usingVoiceControl = !usingVoiceControl;
+  //   if (usingVoiceControl) {
+  //     // Disable mouth control and Enter key control
+  //     usingMouthControl = false;
+  //     drawingEnabled = false;
+  //     speechRec.start(true, false); // Start speech recognition
+  //   } else {
+  //     speechRec.stop(); // Stop speech recognition
+  //     // Enable Enter key control
+  //     drawingEnabled = false;
+  //     usingMouthControl = false;
+  //   }
+  // }
 
   if (!usingMouthControl && !usingVoiceControl) {
     if(key === 'Enter') {
@@ -276,15 +277,16 @@ function isMouthOpen(keypoints) {
   }
 }
 
-function parseResult() {
-  if (speechRec.resultString.includes("start")) {
-    drawingEnabled = true;
-  } else if (speechRec.resultString.includes("stop")) {
-    drawingEnabled = false;
-    paths.push(currentPath);
-    currentPath = [];
-  }
-}
+// Voice mode disabled for now
+// function parseResult() {
+//   if (speechRec.resultString.includes("start")) {
+//     drawingEnabled = true;
+//   } else if (speechRec.resultString.includes("stop")) {
+//     drawingEnabled = false;
+//     paths.push(currentPath);
+//     currentPath = [];
+//   }
+// }
 
 function clearCanvas() {
   currentPath = [];
