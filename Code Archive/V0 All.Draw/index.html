@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>AI Draw</title>
+    <link rel="stylesheet" href="style.css">
+
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.4/p5.min.js"></script>
+    <script src="https://unpkg.com/ml5@1.0.1/dist/ml5.min.js"></script>
+    <script src="https://unpkg.com/ml5@0.20.0-alpha.4/dist/ml5.min.js"></script>
+</head>
+<body>
+    <div class="AilDraw">
+        <div class="Frame1">
+            <h1 class="AilDrawTitle">all.draw</h1>
+            <!-- <div class="Frame3">
+                <h2 class="DrawWith">draw with</h2>
+                <button id="fingerButton" class="Button">Finger</button>
+                <button id="noseButton" class="Button">Nose</button>
+                <button id="minuteNeckButton" class="Button">Minute Neck Movements</button>
+                <button id="moveAroundButton" class="Button">Move Around</button>
+            </div> -->
+            <div class="Frame7">
+                <h2 class="ByArtist">By artist</h2>
+                <div class="FormNewsletter">
+                    <input type="text" class="Input" value="John">
+                        <!-- <div class="HelloWorld">you@example.com</div> -->
+                    <!-- </div> -->
+                </div>
+            </div>
+            <div class="Frame6">
+                <button id="saveArtButton" class="Button">Save Art</button>
+            </div>
+        </div>
+        <div class="Frame2" id="canvasContainer">
+        </div>
+    </div>
+    <!-- <script src="handTracking.js"></script> -->
+    <script src="neckTracking.js"></script>
+    <!-- <script src="noseTracking.js"></script> -->
+    <!-- <script src="moveAround.js"></script> -->
+    <script src="script.js"></script>
+</body>
+</html>
