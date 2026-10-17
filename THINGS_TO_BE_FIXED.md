@@ -4,6 +4,16 @@ Pending fixes and cleanups for the files that aren't in use right now. The live 
 
 ---
 
+## Design / UI (later)
+
+- [ ] **Shape tools (square, circle) are on hold.** They're hidden in the screen design because they were confusing. Before bringing them back, work out:
+  - what touching a shape does (stamp a fixed-size shape? draw one by moving the head?), and how a user would know
+  - how it fits the rule that tools are big and far apart, for users with severe motor disabilities
+  - whether they belong in Create or in a separate mode
+  - Design: "all.draw Canvas Screen" (the shapes are still there, just hidden); design system: "all.draw", ShapeTool component.
+
+---
+
 ## `noseTracking.js` (bring back once the UI is designed)
 
 ### Bugs
