@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>All.draw.learn</title>
+  <title>All.draw</title>
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -11,29 +11,86 @@
   <script src="https://unpkg.com/ml5@0.20.0-alpha.4/dist/ml5.min.js"></script>
 </head>
 <body>
+<div class="app">
 
-  <div id="canvasWrapper">
+  <!-- Properties: for the art therapist to set up a session. Collapsed by default. -->
+  <div class="props" id="props">
+    <div class="bar props-bar" id="propertiesBar" aria-label="Properties" hidden>
+      <div class="bar-group">
+        <div class="field">
+          <span class="label-col"><span class="label" id="modeLabel">Mode</span><span class="help" id="modeHelp">More tools</span></span>
+          <div class="modes" role="radiogroup" aria-labelledby="modeLabel">
+            <button class="mode" type="button" role="radio" aria-checked="false" data-mode="learn">Learn</button>
+            <button class="mode" type="button" role="radio" aria-checked="false" data-mode="play">Play</button>
+            <button class="mode" type="button" role="radio" aria-checked="true" data-mode="create">Create</button>
+          </div>
+        </div>
+
+        <div class="field">
+          <span class="label-col"><span class="label" id="mouthLabel">Mouth Draw <kbd class="key">M</kbd></span><span class="help" id="mouthHelp">Off · press Enter to draw</span></span>
+          <button class="switch" type="button" role="switch" aria-checked="false" aria-labelledby="mouthLabel" id="mouthSwitch"><span class="knob"></span></button>
+        </div>
+      </div>
+
+      <div class="bar-group">
+        <div class="field trace">
+          <span class="label" id="traceLabel">Trace</span>
+          <button class="select" type="button" id="traceButton" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="traceLabel traceValue">
+            <span class="thumb" id="traceThumb" aria-hidden="true"></span>
+            <span class="select-value" id="traceValue">None</span>
+            <svg class="chevron" aria-hidden="true" viewBox="0 0 16 16" width="16" height="16"><path d="M3 6l5 5 5-5"/></svg>
+          </button>
+          <div class="listbox" role="listbox" id="traceList" aria-labelledby="traceLabel" hidden></div>
+        </div>
+
+        <label class="field">
+          <span class="label">Upload Image</span>
+          <input class="visually-hidden" type="file" id="imageUploadInput" accept="image/*" />
+          <span class="file-box" id="uploadName">Choose image…</span>
+        </label>
+        <button class="secondary" type="button" id="removeImage" hidden>Remove</button>
+      </div>
+    </div>
+
+    <button class="tab" type="button" id="propsTab" aria-expanded="false" aria-controls="propertiesBar">
+      Properties
+      <svg class="chevron" aria-hidden="true" viewBox="0 0 16 16" width="16" height="16"><path d="M3 6l5 5 5-5"/></svg>
+    </button>
+  </div>
+
+  <!-- Canvas: the p5 canvas fills it; tools sit on top (Create mode only) -->
+  <div class="frame" id="canvasFrame">
     <div id="canvasContainer"></div>
+    <div class="tools" id="tools">
+      <button class="blob blob-blue" type="button" data-paint="blue" aria-label="Blue paint"></button>
+      <button class="blob blob-green" type="button" data-paint="green" aria-label="Green paint"></button>
+      <button class="blob blob-orange" type="button" data-paint="orange" aria-label="Orange paint"></button>
+      <button class="blob blob-black" type="button" data-paint="black" aria-label="Black paint" aria-pressed="true"></button>
+      <button class="tool tool-pen" type="button" data-tool="pen" aria-label="Pen tool" aria-pressed="true"><img src="pen.png" alt="" /></button>
+      <button class="tool tool-eraser" type="button" data-tool="eraser" aria-label="Eraser tool" aria-pressed="false"><img src="eraser.png" alt="" /></button>
+    </div>
+    <!-- The pen cursor sits above the tools so it's never hidden behind a paint blob -->
+    <div class="cursor" id="cursor" aria-hidden="true">
+      <span class="cursor-shadow"></span>
+      <span class="cursor-icon"></span>
+    </div>
   </div>
 
-  <div class="toolbar">
-    <div class="title-section">
-      <span class="arrow">←</span>
-      <strong>All.draw.learn</strong>
+  <div class="bar bottom-bar">
+    <div class="bar-group">
+      <a class="back" href="#" aria-label="Back">←</a>
+      <span class="wordmark">All.draw</span>
+      <!-- Kept away from Save Art so restarting by mistake doesn't lose a drawing someone meant to save -->
+      <button class="secondary restart" type="button" id="restartButton" aria-keyshortcuts="Space"><span aria-hidden="true">↺</span> Restart <kbd class="key">Space</kbd></button>
     </div>
-    <div class="title-section">
-      <span class="label">Trace Image</span>
-      <input type="file" id="imageUploadInput" accept="image/*" />
-      <span class="label">Title</span>
-      <input type="text" id="artworkTitle" placeholder="Artwork Name" />
-      <span class="label">By Artist</span>
-      <input type="text" id="artistname" placeholder="Name" />
+    <div class="bar-group">
+      <label class="field"><span class="label">Title</span><input class="input" type="text" id="artworkTitle" placeholder="Artwork Name" /></label>
+      <label class="field"><span class="label">By Artist</span><input class="input" type="text" id="artistname" placeholder="Name" /></label>
+      <button class="button" type="button" id="saveArtButton"><span aria-hidden="true">☆</span> Save Art</button>
     </div>
-    <button id="saveArtButton">★ Save Art</button>
   </div>
 
-  <!-- <script src="libraries/p5.speech.js"></script> -->
-  <script src="neckTracking.js"></script>
-  <!-- <script src="noseTracking.js"></script> -->
+</div>
+<script src="allDraw.js"></script>
 </body>
 </html>

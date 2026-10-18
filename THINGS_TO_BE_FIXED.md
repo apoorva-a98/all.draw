@@ -1,6 +1,6 @@
 # Things to be fixed
 
-Pending fixes and cleanups for the files that aren't in use right now. The live app is `index.html` + `neckTracking.js`, which are not covered here.
+Pending fixes and ideas. The live app is `index.html` + `style.css` + `allDraw.js` (Learn, Play and Create modes in one sketch). `neckTracking.js`, `noseTracking.js` and `sketch.js` are kept as reference only and aren't loaded.
 
 ---
 
@@ -11,44 +11,33 @@ Pending fixes and cleanups for the files that aren't in use right now. The live 
   - how it fits the rule that tools are big and far apart, for users with severe motor disabilities
   - whether they belong in Create or in a separate mode
   - Design: "all.draw Canvas Screen" (the shapes are still there, just hidden); design system: "all.draw", ShapeTool component.
-- [ ] **Decide what Upload Image does.** It's back in the design as "Upload Image" (still "Trace Image" in V2's code), next to the Trace dropdown. The idea: let the therapist upload a custom path for the learner to follow, like the built-in Trace shapes (Butterfly, Star, Leaf). Work out how an uploaded picture becomes a path: an outline? a dashed line? where the start dot goes?
-- [ ] **Switch the code to the colour-blind-safe palette.** The design now uses the Okabe-Ito colours: orange `#E69F00` (replaces red), blue `#0072B2`, green `#009E73`. `neckTracking.js` still uses `color(0, 0, 255)`, `color(0, 128, 0)` and `color(255, 0, 0)` for the corner paints.
-- [ ] **Build the Trace dropdown in the code.** It's in the design (properties bar, right side). The shapes' SVG paths are in the design system's Trace component.
+- [ ] **Decide what Upload Image does.** Right now it shows the picture faded on the canvas (left of centre). The idea: let the therapist upload a custom path for the learner to follow, like the built-in Trace shapes (Butterfly, Star, Leaf). Work out how an uploaded picture becomes a path: an outline? a dashed line? where the start dot goes?
+- [x] **Colour-blind-safe palette in the code.** `allDraw.js` uses the Okabe-Ito colours: orange `#E69F00`, blue `#0072B2`, green `#009E73`.
+- [x] **Trace dropdown in the code.** Butterfly, Star and Leaf draw as dashed paths with a Start dot; hidden when saving.
+- [ ] **Update the design system to match the build:** the Restart button (bottom bar, next to All.draw, Space), tools picked by resting 2 seconds within 40px, a ring that grows while picking, and the cursor taking the paint colour or becoming the eraser.
+- [ ] **Space wipes the drawing instantly.** Restart clears everything, and Space is easy to hit by accident. Consider hold-to-restart (hold about a second, the button fills while held).
+- [ ] **The pen draws on its way to a tool.** If the pen is down while you steer to a paint blob, the stroke runs into the corner. Consider lifting the pen automatically while it rests on a tool.
+- [ ] **Pen icon is clipped near the top edge.** The pen picture sits 90px above its tip, and the tip can go to 50px from the top, so the top of the icon gets cut off there.
 
 ---
 
-## `noseTracking.js` (bring back once the UI is designed)
+## Done in `allDraw.js` (October 2026)
 
-### Bugs
-- [ ] **Always drawing.** `draw()` adds to `nosePath` every frame and never checks `drawingEnabled`. Enter and mouth control have no effect.
-- [ ] **Mouth control never runs.** `isMouthOpen()` is defined but never called from `draw()`.
-- [ ] **Clear doesn't erase the drawing.** `clearCanvas()` (line ~291) resets `paths` and `currentPath`, but the drawing is stored in `nosePath`, which never gets reset.
-- [ ] **`clearCanvas()` doesn't turn drawing off.** It uses `let drawingEnabled = false` (line ~295), which creates a new local variable instead of resetting the real one. Drop the `let`.
-- [ ] **Nose position scaling is off.** `map(nose.x, 0, 640, 0, width)` (lines 104–105) assumes a 640×480 video, but the video is sized to the full window (line 41). The dot and line only line up when the window is 640×480.
-- [ ] **Drawing vanishes when the face is lost.** The path is drawn inside `for (let face of faces)` (line ~145), so it disappears while no face is detected.
-- [ ] **Saved filename starts with a space.** `" by " + name` is used as the filename, giving `" by John.png"`.
-- [ ] **Signature text lands in the wrong place on Retina screens.** It uses `canvas.clientHeight`, which is in CSS pixels, so check its placement on high-DPI screens.
-
-### Cleanup
-- [ ] `paths` / `currentPath` are only used by the Enter/mouth logic, so they're unused until that's wired into `draw()`.
-- [ ] Remove the commented-out random shapes code (`spawnRandomShape`, `drawShapes`, `shapes`, `shapeTimer`).
-- [ ] Voice mode is commented out (`v` key, `parseResult`). Either finish it with p5.speech or delete it along with `usingVoiceControl`, `myRec` and `speechRec`.
-- [ ] There's a duplicate commented-out `remove()` at the bottom of the file.
-
-### Before switching back to it
-- [ ] `index.html` currently loads `neckTracking.js` directly. Swapping the script tag is enough for one mode, but switching modes on the fly needs p5 instance mode (see `sketch.js` below).
-- [ ] Both scripts attach their own `saveArtButton` click listener. If both ever load, Print Art runs twice.
+- [x] Learn / Play / Create modes in one sketch, switched from the properties bar (replaces the `sketch.js` script-swapping idea).
+- [x] Learn mode uses the nose tracking from `noseTracking.js`, now respecting Enter and Mouth Draw, and with the nose dot mapped from the camera's own resolution so it lands on the nose. The camera keeps its proportions (cropped, not stretched).
+- [x] The pen reaches the whole canvas (the old `windowHeight + 200` limit is gone).
+- [x] Mouth Draw: switch in the properties bar and the M key stay in sync; Enter during Mouth Draw switches it off and lifts the pen; no more empty strokes piling up.
+- [x] Typing in Title or By Artist no longer triggers M, Enter or Space.
+- [x] Saved filename is "<Title> by <Artist>.png" (no leading space; "all.draw.png" if both are empty).
+- [x] Eraser works on its own layer, so it never wipes the trace guide or an uploaded image.
+- [x] Pen cursor sits above the tools, shows pen up/down (`pen.png` / `pen-raised.png` with a shadow dot), takes the paint colour, and becomes the eraser.
+- [x] Restart (button or Space) clears the drawing and goes back to the black pen in the centre.
 
 ---
 
-## `sketch.js` (mode switcher, not loaded)
+## Reference files (not loaded)
 
-- [ ] **Not loaded.** `index.html` doesn't include it at all.
-- [ ] **Buttons are missing.** It looks up `fingerButton`, `noseButton`, `minuteNeckButton` and `moveAroundButton`, none of which exist in `index.html`. `getElementById(...)` returns `null`, so it would crash.
-- [ ] **This way of switching can't work.** In p5 *global mode*, removing a `<script>` tag doesn't unload its functions, and p5 won't re-run `setup()` for a new script. Proper switching needs **p5 instance mode** (`new p5(sketch, 'canvasContainer')`), with each mode as its own sketch object.
-- [ ] **`canvas` is undefined.** `script.onload` refers to `canvas`, which isn't defined there.
-- [ ] **Save button.** It calls `saveCanvas(...)` + `clearCanvas()`, which overlaps with the save logic inside each sketch.
-- [ ] **Unused code.** `saveArt()` and `resetButtons()` are never called. The `minuteNeckButton` handler is empty.
+`neckTracking.js`, `noseTracking.js` and `sketch.js` stay in the repo for reference; their bugs are fixed in `allDraw.js` rather than in place. `noseTracking.js` still has its commented-out random shapes and voice-mode code if those ideas come back.
 
 ---
 
@@ -92,6 +81,6 @@ Pending fixes and cleanups for the files that aren't in use right now. The live 
 
 ## Other
 
-- [ ] **`V2` branch** loads `ml5@1.0.1` but still passes `flipHorizontal: true` in `neckTracking.js`, so the video may not be mirrored and left/right steering could be reversed.
+- [x] **`V2` branch** now loads `ml5@0.20.0-alpha.4`, the version `flipHorizontal` works with.
 - [ ] **`Code Archive/V0 All.Draw/index.html`** still loads both ml5 versions (fine if it stays a frozen snapshot).
-- [ ] **Unused images.** `pen (1).png`, `pen1.png`, `pen.svg`, `eraser.png` and `_by Johnc.png` in the repo root aren't referenced by the live app (only `pen.png` is). Keep them for the new UI or move them to an `assets/` folder.
+- [ ] **Unused images.** `pen (1).png`, `pen1.png`, `pen.svg` and `_by Johnc.png` in the repo root aren't referenced by the live app (it uses `pen.png`, `pen-raised.png` and `eraser.png`). Keep them for the new UI or move them to an `assets/` folder.
