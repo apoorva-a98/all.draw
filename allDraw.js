@@ -66,6 +66,9 @@ const EDGE = 50; // the pen stays this far inside the canvas
 let mode = 'create';
 let penX, penY;
 let lastNose = null; // smoothed nose-mode pen position
+let straightNod = 0; // Learn: nod angle taken as looking straight at the screen
+let nodSamples = 0; // frames averaged into straightNod so far (0 = start again)
+const NOD_RANGE = 15; // Learn: nodding this many degrees from straight reaches the top or bottom edge
 let drawingEnabled = false;
 let usingMouthControl = false;
 let mouthWasOpen = false;
@@ -170,10 +173,19 @@ function moveWithNose(keypoints) {
   if (!n) return;
 
   const yaw = (nose.x - (leftEye.x + rightEye.x) / 2) * 2;
-  const pitch = (nose.y - (leftEye.y + rightEye.y) / 2) * 2;
   const moveX = map(yaw, -30, 30, -200, 200);
-  const moveY = map(pitch, -30, 30, -200, 50);
-  const target = createVector(n.x + moveX * 2, n.y + moveY * 2);
+
+  // Up/down: the head's nod angle from the face model's 3D points, measured from where the head was
+  // when Learn started or at the last Restart (people look at the screen, not the camera, so
+  // "straight" differs by setup). Nodding NOD_RANGE degrees reaches the top or bottom edge.
+  const nod = degrees(Math.atan2(keypoints[152].z - keypoints[10].z, keypoints[152].y - keypoints[10].y)); // chin vs forehead
+  if (nodSamples < 20) { // average the first 20 frames: the model's first readings aren't settled yet
+    nodSamples++;
+    straightNod = nodSamples === 1 ? nod : straightNod + (nod - straightNod) / nodSamples;
+  }
+  const moveY = ((nod - straightNod) / NOD_RANGE) * (height / 2);
+
+  const target = createVector(n.x + moveX * 2, n.y + moveY);
 
   if (!lastNose) {
     lastNose = target;
@@ -460,6 +472,7 @@ function restart() {
   penX = width / 2;
   penY = height / 2;
   lastNose = createVector(penX, penY); // Learn: smooth on from here
+  nodSamples = 0; // and re-centre on the current head position
 }
 
 // ---- Controls ----
@@ -467,6 +480,7 @@ function restart() {
 function setMode(next) {
   mode = next;
   lastNose = null;
+  nodSamples = 0;
   for (const el of document.querySelectorAll('[data-mode]')) {
     el.setAttribute('aria-checked', String(el.dataset.mode === mode));
   }
