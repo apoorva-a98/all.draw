@@ -17,6 +17,7 @@ Pending fixes and ideas. The live app is `index.html` + `style.css` + `allDraw.j
 - [ ] **Update the design system to match the build:** the Restart button (bottom bar, next to All.draw, Space), tools picked by resting 2 seconds within 40px, a ring that grows while picking, and the cursor taking the paint colour or becoming the eraser.
 - [ ] **Space wipes the drawing instantly.** Restart clears everything, and Space is easy to hit by accident. Consider hold-to-restart (hold about a second, the button fills while held).
 - [ ] **The pen draws on its way to a tool.** If the pen is down while you steer to a paint blob, the stroke runs into the corner. Consider lifting the pen automatically while it rests on a tool.
+- [ ] **The pen isn't seen inside the blob when it changes to the blob's colour.** Once a paint is picked, the pen turns that colour and disappears against the blob it's resting on. Tried: drawing the part inside the blob in white, clipped to the blob's shape (rolled back). Other ideas: a thin outline around the pen icon, or a white pen with only a coloured tip.
 - [ ] **Pen icon is clipped near the top edge.** The pen picture sits 90px above its tip, and the tip can go to 50px from the top, so the top of the icon gets cut off there.
 
 ---
