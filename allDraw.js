@@ -68,7 +68,9 @@ let penX, penY;
 let lastNose = null; // smoothed nose-mode pen position
 let straightNod = 0; // Learn: nod angle taken as looking straight at the screen
 let nodSamples = 0; // frames averaged into straightNod so far (0 = start again)
-const NOD_RANGE = 15; // Learn: nodding this many degrees from straight reaches the top or bottom edge
+// Learn: nod (as the face model reports it) from straight to the top or bottom edge. The model's angle
+// reads about twice the real head movement, so 30 here gives roughly 25-30 real degrees from top to bottom.
+const NOD_RANGE = 30;
 let drawingEnabled = false;
 let usingMouthControl = false;
 let mouthWasOpen = false;
