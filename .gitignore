@@ -1,0 +1,5 @@
+# Claude Code's working folders (session worktrees, settings)
+.claude/
+
+# macOS folder settings
+.DS_Store
