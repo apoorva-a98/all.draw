@@ -6,6 +6,8 @@ Pending fixes and ideas. The live app is `index.html` + `style.css` + `allDraw.j
 
 ## Design / UI (later)
 
+- [ ] **Learn mode: control is still hard for tracing.** Current version: up/down and left/right both use the face model's 3D head angles, measured from "straight" (the first 20 frames, or Restart). `NOD_RANGE = 30`, `TURN_RANGE = 70` in `allDraw.js`; smoothing is the original (30px dead zone, 0.2 step). Tried and rolled back: moving average, One Euro filter, averaged face points, spike rejection, Smooth Lines (curves + 4px gap), smoothing steps 0.05-0.6. Ideas not yet tried: place the pen from the canvas centre instead of the nose (the nose slides sideways when turning), a guide magnet toward the Trace path, on-track feedback.
+
 - [ ] **Shape tools (square, circle) are on hold.** They're hidden in the screen design because they were confusing. Before bringing them back, work out:
   - what touching a shape does (stamp a fixed-size shape? draw one by moving the head?), and how a user would know
   - how it fits the rule that tools are big and far apart, for users with severe motor disabilities

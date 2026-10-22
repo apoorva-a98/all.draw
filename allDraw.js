@@ -67,10 +67,14 @@ let mode = 'create';
 let penX, penY;
 let lastNose = null; // smoothed nose-mode pen position
 let straightNod = 0; // Learn: nod angle taken as looking straight at the screen
+let straightTurn = 0; // Learn: turn angle taken as looking straight at the screen
 let nodSamples = 0; // frames averaged into straightNod so far (0 = start again)
 // Learn: nod (as the face model reports it) from straight to the top or bottom edge. The model's angle
 // reads about twice the real head movement, so 30 here gives roughly 25-30 real degrees from top to bottom.
 const NOD_RANGE = 30;
+// Learn: turn (as the face model reports it) from straight to a side edge. Aims for about 30 real
+// degrees of turn from the left edge to the right; higher = less sensitive.
+const TURN_RANGE = 70;
 let drawingEnabled = false;
 let usingMouthControl = false;
 let mouthWasOpen = false;
@@ -166,28 +170,27 @@ function toCanvas(pt) {
   return { x: fit.x + pt.x * fit.s, y: fit.y + pt.y * fit.s };
 }
 
-// Learn: the pen sits ahead of the nose, pushed further the more you turn (from noseTracking.js)
+// Learn: the pen sits ahead of the nose, pushed further the more you turn or nod (from noseTracking.js).
+// Both directions use the head's angles from the face model's 3D points, measured from where the head
+// was when Learn started or at the last Restart (people look at the screen, not the camera, so
+// "straight" differs by setup):
+//   up/down    = nod: forehead vs chin. Nodding NOD_RANGE degrees reaches the top or bottom edge.
+//   left/right = turn: the two sides of the face. Turning TURN_RANGE degrees reaches a side edge.
 function moveWithNose(keypoints) {
-  const nose = keypoints[noseIndex];
-  const leftEye = keypoints[leftEyeIndex];
-  const rightEye = keypoints[rightEyeIndex];
-  const n = toCanvas(nose);
+  const n = toCanvas(keypoints[noseIndex]);
   if (!n) return;
 
-  const yaw = (nose.x - (leftEye.x + rightEye.x) / 2) * 2;
-  const moveX = map(yaw, -30, 30, -200, 200);
-
-  // Up/down: the head's nod angle from the face model's 3D points, measured from where the head was
-  // when Learn started or at the last Restart (people look at the screen, not the camera, so
-  // "straight" differs by setup). Nodding NOD_RANGE degrees reaches the top or bottom edge.
-  const nod = degrees(Math.atan2(keypoints[152].z - keypoints[10].z, keypoints[152].y - keypoints[10].y)); // chin vs forehead
+  const nod = degrees(Math.atan2(keypoints[152].z - keypoints[10].z, keypoints[152].y - keypoints[10].y));
+  const turn = degrees(Math.atan2(keypoints[454].z - keypoints[234].z, keypoints[454].x - keypoints[234].x));
   if (nodSamples < 20) { // average the first 20 frames: the model's first readings aren't settled yet
     nodSamples++;
     straightNod = nodSamples === 1 ? nod : straightNod + (nod - straightNod) / nodSamples;
+    straightTurn = nodSamples === 1 ? turn : straightTurn + (turn - straightTurn) / nodSamples;
   }
+  const moveX = ((turn - straightTurn) / TURN_RANGE) * (width / 2);
   const moveY = ((nod - straightNod) / NOD_RANGE) * (height / 2);
 
-  const target = createVector(n.x + moveX * 2, n.y + moveY);
+  const target = createVector(n.x + moveX, n.y + moveY);
 
   if (!lastNose) {
     lastNose = target;
